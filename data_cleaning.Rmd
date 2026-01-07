@@ -1,0 +1,119 @@
+---
+title: "CIA World Factbook Data Cleaning"
+author: "Abhinav Erraguntla"
+output: html_notebook
+---
+
+
+```{r}
+# Load the required library for reading and saving data
+library(tidyverse)
+```
+
+
+```{r}
+# Read all lines from the file
+raw_lines <- readLines("Maternal mortality ratio.csv")
+
+# Fix the header line by replacing the problematic column name
+raw_lines[1] <- "name,slug,deaths_per_100000,date_of_information,ranking,region"
+
+# Read the fixed data into a dataframe
+maternal <- read.csv(text = raw_lines)
+
+# Select only the 3 required columns: country name, variable, and region
+maternal <- maternal %>%
+  select(name, deaths_per_100000, region)
+
+# View the result to verify
+head(maternal)
+```
+
+
+
+
+```{r}
+# Read all lines from the infant mortality file
+raw_lines_infant <- readLines("Infant mortality rate.csv")
+
+# Fix the header line by replacing the problematic column name
+raw_lines_infant[1] <- "name,slug,deaths_per_1000,date_of_information,ranking,region"
+
+# Read the fixed data into a dataframe
+infant <- read.csv(text = raw_lines_infant)
+
+# Select only the 3 required columns: country name, variable, and region
+infant <- infant %>%
+  select(name, deaths_per_1000, region)
+
+# View the result to verify
+head(infant)
+```
+
+
+
+```{r}
+# Read the life expectancy file (no header fix needed)
+life_exp <- read.csv("Life expectancy at birth.csv")
+
+# Select only the 3 required columns: country name, variable, and region
+life_exp <- life_exp %>%
+  select(name, years, region)
+
+# View the result to verify
+head(life_exp)
+```
+
+```{r}
+# Save maternal mortality data as RDS format
+saveRDS(maternal, "maternal_mortality.rds")
+
+# Save maternal mortality data as CSV format
+write.csv(maternal, "maternal_mortality.csv", row.names = FALSE)
+
+# Save infant mortality data as RDS format
+saveRDS(infant, "infant_mortality.rds")
+
+# Save infant mortality data as CSV format
+write.csv(infant, "infant_mortality.csv", row.names = FALSE)
+
+# Save life expectancy data as RDS format
+saveRDS(life_exp, "life_expectancy.rds")
+
+# Save life expectancy data as CSV format
+write.csv(life_exp, "life_expectancy.csv", row.names = FALSE)
+```
+
+
+```{r}
+
+# Verify data types for maternal mortality - RDS format
+str(readRDS("maternal_mortality.rds"))
+
+# Verify data types for maternal mortality - CSV format
+str(read.csv("maternal_mortality.csv"))
+```
+```{r}
+
+# Verify data types for infant mortality - RDS format
+str(readRDS("infant_mortality.rds"))
+
+# Verify data types for infant mortality - CSV format
+str(read.csv("infant_mortality.csv")) 
+```
+```{r}
+
+# Verify data types for life expectancy - RDS format
+str(readRDS("life_expectancy.rds"))
+
+# Verify data types for life expectancy - CSV format
+str(read.csv("life_expectancy.csv"))
+```
+```
+
+
+
+
+
+
+
